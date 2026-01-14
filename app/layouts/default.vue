@@ -4,7 +4,7 @@ import AppHeader from '~/components/AppHeader.vue'
 </script>
 
 <template>
-  <div class="flex h-screen overflow-hidden bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans">
+  <div class="flex h-screen overflow-hidden bg-gray-100 dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans">
     <!-- Sidebar -->
     <AppSidebar />
 

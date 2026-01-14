@@ -2,7 +2,7 @@
   <div class="flex flex-col gap-6">
     <!-- Page Header -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <h1 class="text-2xl font-semibold text-gray-900 dark:text-white">Expense List</h1>
+      <h1 class="text-lg font-semibold text-gray-900 dark:text-white">Expense List</h1>
       <UBreadcrumb :items="[{ label: 'Expenses', to: '/' }, { label: 'Expense List' }]" />
     </div>
 
@@ -25,11 +25,12 @@
             <!-- Entries Selector -->
             <div class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                 <span>Show</span>
-                <USelect 
+                <USelectMenu 
                     v-model="pagination.limit" 
                     :options="[5, 10, 25, 50]" 
                     size="sm"
                     class="w-20"
+                    :ui-menu="{ width: 'w-20', zIndex: 'z-50' }"
                     @change="onPageChange(1)"
                 />
                 <span>entries</span>
