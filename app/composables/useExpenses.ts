@@ -38,6 +38,8 @@ export const useExpenses = () => {
             pagination.total = meta.total
             pagination.totalPages = meta.totalPages
 
+            console.log('Pagination meta:', { page: meta.page, limit: meta.limit, total: meta.total, totalPages: meta.totalPages })
+
         } catch (error: any) {
             toast.add({
                 title: 'Error fetching expenses',

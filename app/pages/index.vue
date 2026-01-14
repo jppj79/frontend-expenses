@@ -25,13 +25,11 @@
             <!-- Entries Selector -->
             <div class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                 <span>Show</span>
-                <USelectMenu 
+                <USelect 
                     v-model="pagination.limit" 
-                    :options="[5, 10, 25, 50]" 
+                    :items="[5, 10, 25, 50]" 
                     size="sm"
                     class="w-20"
-                    :ui-menu="{ width: 'w-20', zIndex: 'z-50' }"
-                    @change="onPageChange(1)"
                 />
                 <span>entries</span>
             </div>
@@ -126,12 +124,10 @@
            <span class="text-sm text-gray-500">
              Showing {{ pagination.total === 0 ? 0 : ((pagination.page - 1) * pagination.limit) + 1 }} to {{ Math.min(pagination.page * pagination.limit, pagination.total) }} of {{ pagination.total }} entries
            </span>
-            <UPagination
+            <CustomPagination
                 v-model="pagination.page"
-                :page-count="pagination.limit"
                 :total="pagination.total"
-                :ui="{ wrapper: 'gap-1', rounded: 'rounded-full' }"
-                @update:model-value="onPageChange"
+                :page-count="pagination.limit"
             />
         </div>
 
@@ -236,6 +232,11 @@ const filterItems = computed(() => {
     ]
 })
 
+// Computed for total pages to ensure reactivity
+const totalPages = computed(() => {
+    return pagination.totalPages || Math.ceil(pagination.total / pagination.limit) || 1
+})
+
 // Table Columns (Added ID mock column for checkbox placeholder if needed)
 const columns = [
   { id: 'select', header: '' },
@@ -286,9 +287,21 @@ const debounceSearch = useDebounceFn(() => {
 }, 300)
 
 const onPageChange = (newPage: number) => {
+    console.log('onPageChange called with:', newPage, 'Current totalPages:', pagination.totalPages)
     pagination.page = newPage
-    fetchData()
 }
+
+// Watch for pagination changes
+watch(() => pagination.page, (newPage, oldPage) => {
+    console.log('Page changed from', oldPage, 'to', newPage)
+    fetchData()
+})
+
+watch(() => pagination.limit, (newLimit, oldLimit) => {
+    console.log('Limit changed from', oldLimit, 'to', newLimit)
+    pagination.page = 1
+    fetchData()
+})
 
 // Helpers
 const formatCurrency = (value: number) => {
