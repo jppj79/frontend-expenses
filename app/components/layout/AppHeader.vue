@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import UserDropdown from '~/components/UserDropdown.vue'
+import { useLayout } from '~/composables/useLayout'
+
 const { toggleSidebar } = useLayout()
 </script>
 
@@ -29,7 +30,7 @@ const { toggleSidebar } = useLayout()
         
         <UDivider orientation="vertical" class="h-6 mx-2" />
 
-        <UserDropdown />
+        <LayoutUserDropdown />
         
         <UButton icon="i-heroicons-cog-6-tooth" color="gray" variant="ghost" />
     </div>

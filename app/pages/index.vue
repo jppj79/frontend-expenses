@@ -124,7 +124,7 @@
            <span class="text-sm text-gray-500">
              Showing {{ pagination.total === 0 ? 0 : ((pagination.page - 1) * pagination.limit) + 1 }} to {{ Math.min(pagination.page * pagination.limit, pagination.total) }} of {{ pagination.total }} entries
            </span>
-            <CustomPagination
+            <UiCustomPagination
                 v-model="pagination.page"
                 :total="pagination.total"
                 :page-count="pagination.limit"

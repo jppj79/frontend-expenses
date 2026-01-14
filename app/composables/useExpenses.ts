@@ -44,7 +44,8 @@ export const useExpenses = () => {
             toast.add({
                 title: 'Error fetching expenses',
                 description: error.message || 'Unknown error',
-                color: 'error'
+                color: 'error',
+                progress: false
             })
         } finally {
             loading.value = false
@@ -59,13 +60,14 @@ export const useExpenses = () => {
                 method: 'POST',
                 body: expense
             })
-            toast.add({ title: 'Expense created', color: 'success' })
+            toast.add({ title: 'Expense created', color: 'success', progress: false })
             return true
         } catch (error: any) {
             toast.add({
                 title: 'Error creating expense',
                 description: error.message,
-                color: 'error'
+                color: 'error',
+                progress: false
             })
             return false
         } finally {
@@ -81,13 +83,14 @@ export const useExpenses = () => {
                 method: 'PUT',
                 body: expense
             })
-            toast.add({ title: 'Expense updated', color: 'success' })
+            toast.add({ title: 'Expense updated', color: 'success', progress: false })
             return true
         } catch (error: any) {
             toast.add({
                 title: 'Error updating expense',
                 description: error.message,
-                color: 'error'
+                color: 'error',
+                progress: false
             })
             return false
         } finally {
@@ -102,13 +105,14 @@ export const useExpenses = () => {
                 baseURL: config.public.apiBase,
                 method: 'DELETE'
             })
-            toast.add({ title: 'Expense deleted', color: 'success' })
+            toast.add({ title: 'Expense deleted', color: 'success', progress: false })
             return true
         } catch (error: any) {
             toast.add({
                 title: 'Error deleting expense',
                 description: error.message,
-                color: 'error'
+                color: 'error',
+                progress: false
             })
             return false
         }
@@ -124,7 +128,8 @@ export const useExpenses = () => {
             toast.add({
                 title: 'Error fetching stats',
                 description: error.message,
-                color: 'error'
+                color: 'error',
+                progress: false
             })
             return []
         }
