@@ -93,9 +93,9 @@ onMounted(() => {
       <div class="h-16 flex items-center px-6 border-b border-gray-100 dark:border-gray-800 flex-shrink-0">
         <div class="flex items-center gap-3">
           <div class="w-8 h-8 rounded bg-primary-500 flex items-center justify-center text-white font-bold text-xl flex-shrink-0">
-            J
+            ET
           </div>
-          <span class="font-bold text-xl text-gray-900 dark:text-white tracking-tight whitespace-nowrap">JPEREZ</span>
+          <span class="font-bold text-xl text-gray-900 dark:text-white tracking-tight whitespace-nowrap">E-TRACKER</span>
         </div>
       </div>
 
