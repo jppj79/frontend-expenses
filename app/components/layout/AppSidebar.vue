@@ -12,7 +12,7 @@ const menuSections = ref([
     {
         title: 'MENU',
         items: [
-            { label: 'Dashboard', icon: 'i-heroicons-home', to: '#', badge: '01', badgeColor: 'primary' }
+            { label: 'Home', icon: 'i-heroicons-home', to: '/dashboard', badge: '01', badgeColor: 'primary' }
         ]
     },
     {
@@ -24,7 +24,7 @@ const menuSections = ref([
                 label: 'Expenses', 
                 icon: 'i-heroicons-document-text', 
                 children: [
-                    { label: 'Expenses List', to: '/' }, // Main expenses index
+                    { label: 'Expenses List', to: '/expenses' },
                     //{ label: 'Expenses Detail', to: '#' }
                 ]
             },
@@ -34,7 +34,7 @@ const menuSections = ref([
                 // Using stats as child or separate? User image didn't show stats explicitly, keeping it accessible
                 // Let's integrate it nicely or keep it as direct link
                  children: [
-                    { label: 'Charts', to: '/stats' }
+                    { label: 'Charts', to: '/expenses/stats' }
                 ]
             },
             //{ label: 'Contacts', icon: 'i-heroicons-users', to: '#' }

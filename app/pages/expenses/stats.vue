@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-col gap-6">
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <h1 class="text-lg font-semibold text-gray-900 dark:text-white">Expense Statistics</h1>
-      <UBreadcrumb :items="[{ label: 'Expenses', to: '/' }, { label: 'Statistics' }]" />
+      <h1 class="text-2xl font-semibold text-gray-900 dark:text-white">Expense Statistics</h1>
+      <UBreadcrumb :items="[{ label: 'Expenses', to: '/expenses' }, { label: 'Statistics' }]" />
     </div>
 
     <div v-if="loading" class="flex justify-center p-12">
