@@ -1,62 +1,76 @@
 <template>
-  <div class="container mx-auto px-4 py-8 max-w-7xl">
-    <!-- Header -->
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
-      <div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Expense Tracker</h1>
-        <p class="text-gray-500 dark:text-gray-400 mt-1">Manage your business expenses efficiently.</p>
-      </div>
-      <UButton 
-        icon="i-heroicons-plus" 
-        size="lg" 
-        color="primary" 
-        variant="solid" 
-        label="New Expense" 
-        @click="openCreateModal"
-      />
+  <div class="flex flex-col gap-6">
+    <!-- Page Header -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <h1 class="text-2xl font-semibold text-gray-900 dark:text-white">Expense List</h1>
+      <UBreadcrumb :items="[{ label: 'Expenses', to: '/' }, { label: 'Expense List' }]" />
     </div>
 
-    <!-- Filters -->
-    <UCard class="mb-8" :ui="{ body: { padding: 'p-4 sm:p-6' } }">
-      <div class="flex flex-col md:flex-row gap-4">
-        <div class="flex-1">
-          <UInput
-            v-model="filters.query"
-            icon="i-heroicons-magnifying-glass-20-solid"
-            size="md"
-            color="white"
-            :trailing="false"
-            placeholder="Search by description..."
-            @input="debounceSearch"
-          />
-        </div>
-        <div class="w-full md:w-64">
-           <USelect
-            v-model="filters.category"
-            :items="filterItems"
-            placeholder="All Categories"
-            @change="fetchData" 
-            class="w-full"
-          />
-           <!-- Note: USelect options should be objects if we want label/value, or just array of strings. 
-                Using simple strings for now based on typical examples or assume specific categories. 
-                User didn't specify categories list, so I'll put a placeholder list or make it editable text if backend accepts any.
-                The prompt mentioned 'selector de categorías'. I will assume fixed categories for UI or string. -->
-        </div>
-      </div>
-    </UCard>
+    <!-- Actions -->
+    <div>
+        <UButton 
+            icon="i-heroicons-plus"
+            label="Add Expense"
+            color="primary"
+            class="bg-emerald-500 hover:bg-emerald-600 text-white border-none ring-0"
+            @click="openCreateModal" 
+        />
+    </div>
 
-    <!-- Content -->
-    <UCard class="w-full" :ui="{ body: { padding: 'p-0' } }">
+    <!-- Main Card -->
+    <div class="bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800">
+        
+        <!-- Controls Header -->
+        <div class="p-6 border-b border-gray-200 dark:border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
+            <!-- Entries Selector -->
+            <div class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                <span>Show</span>
+                <USelect 
+                    v-model="pagination.limit" 
+                    :options="[5, 10, 25, 50]" 
+                    size="sm"
+                    class="w-20"
+                    @change="onPageChange(1)"
+                />
+                <span>entries</span>
+            </div>
+
+            <!-- Search -->
+            <div class="flex items-center gap-2 w-full md:w-auto">
+                 <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Search:</span>
+                 <UInput
+                    v-model="filters.query"
+                    placeholder=""
+                    size="sm"
+                    class="w-full md:w-64"
+                    @input="debounceSearch"
+                />
+            </div>
+        </div>
+
+        <!-- Table -->
         <UTable
           :data="expenses"
           :columns="columns"
           :loading="loading"
           class="w-full"
+          :ui="{ 
+             th: { base: 'uppercase text-xs font-semibold text-gray-500 bg-gray-50 dark:bg-gray-800' },
+             td: { base: 'text-sm text-gray-700 dark:text-gray-200 py-4' },
+             divide: 'divide-gray-100 dark:divide-gray-800'
+          }"
         >
+          <!-- Checkbox Column (Visual mostly, mimicking Minible) -->
+          <template #select-header>
+              <UCheckbox color="primary" />
+          </template>
+          <template #select-cell>
+               <UCheckbox color="primary" />
+          </template>
+
           <!-- Amount Column -->
           <template #amount-cell="{ row }">
-            <span class="font-medium font-mono">
+            <span class="font-medium font-mono text-gray-900 dark:text-white">
               {{ formatCurrency(row.original.amount) }}
             </span>
           </template>
@@ -68,26 +82,29 @@
 
            <!-- Category Column -->
           <template #category-cell="{ row }">
-            <UBadge :color="getCategoryColor(row.original.category)" variant="subtle">
+            <UBadge :color="getCategoryColor(row.original.category)" variant="subtle" size="xs" :ui="{ rounded: 'rounded' }">
               {{ row.original.category }}
             </UBadge>
           </template>
 
           <!-- Actions Column -->
           <template #actions-cell="{ row }">
-            <div class="flex gap-2">
+            <div class="flex gap-2 justify-end px-4">
+               <!-- Tooltip for Edit mimicking the hover menu in image effectively by just showing icons -->
               <UButton
                 icon="i-heroicons-pencil-square"
-                size="sm"
-                color="neutral"
+                size="xs"
+                color="primary"
                 variant="ghost"
+                class="bg-blue-50 dark:bg-blue-900/10 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/20"
                 @click="openEditModal(row.original)"
               />
               <UButton
                 icon="i-heroicons-trash"
-                size="sm"
-                color="error"
+                size="xs"
+                color="red"
                 variant="ghost"
+                class="bg-red-50 dark:bg-red-900/10 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/20"
                 @click="confirmDelete(row.original)"
               />
             </div>
@@ -95,27 +112,30 @@
           
            <!-- Empty State -->
            <template #empty-state>
-            <div class="flex flex-col items-center justify-center py-12 gap-3">
-              <span class="italic text-sm text-gray-500">No expenses found matching your criteria.</span>
+            <div class="flex flex-col items-center justify-center py-12 gap-3 text-gray-500">
+               <UIcon name="i-heroicons-document-magnifying-glass" class="w-10 h-10 text-gray-300" />
+               <span class="italic text-sm">No expenses found matching your criteria.</span>
             </div>
           </template>
 
         </UTable>
 
-        <!-- Pagination -->
-        <div class="flex justify-between items-center px-4 py-4 border-t border-gray-200 dark:border-gray-700">
+        <!-- Pagination Footer -->
+        <div class="flex justify-between items-center px-6 py-4 border-t border-gray-200 dark:border-gray-800">
            <span class="text-sm text-gray-500">
-             Showing {{ ((pagination.page - 1) * pagination.limit) + 1 }} to {{ Math.min(pagination.page * pagination.limit, pagination.total) }} of {{ pagination.total }} results
+             Showing {{ pagination.total === 0 ? 0 : ((pagination.page - 1) * pagination.limit) + 1 }} to {{ Math.min(pagination.page * pagination.limit, pagination.total) }} of {{ pagination.total }} entries
            </span>
             <UPagination
                 v-model="pagination.page"
                 :page-count="pagination.limit"
                 :total="pagination.total"
+                :ui="{ wrapper: 'gap-1', rounded: 'rounded-full' }"
                 @update:model-value="onPageChange"
             />
         </div>
-    </UCard>
-    
+
+    </div>
+
     <!-- Create/Edit Modal -->
     <UModal v-model:open="isModalOpen">
       <template #content>
@@ -203,12 +223,10 @@ const filters = reactive({
     query: '',
     category: '',
     page: 1,
-    limit: 10
 })
 
 // Categories
-// Hardcoded for now, ideal would be to fetch from API if available
-const categories = ['Food', 'Transport', 'Office', 'Entertainment', 'Utilities', 'Tools','Other']
+const categories = ['Food', 'Transport', 'Office', 'Entertainment', 'Utilities', 'Tools', 'Other']
 
 const filterItems = computed(() => {
     return [
@@ -217,13 +235,14 @@ const filterItems = computed(() => {
     ]
 })
 
-// Table Columns
+// Table Columns (Added ID mock column for checkbox placeholder if needed)
 const columns = [
+  { id: 'select', header: '' },
   { accessorKey: 'description', header: 'Description' },
-  { accessorKey: 'amount', header: 'Amount' },
   { accessorKey: 'date', header: 'Date' },
   { accessorKey: 'category', header: 'Category' },
-  { id: 'actions', header: '' }
+  { accessorKey: 'amount', header: 'Amount' },
+  { id: 'actions', header: 'Action' }
 ]
 
 // Modal State
@@ -246,12 +265,16 @@ onMounted(() => {
 })
 
 const fetchData = () => {
-    filters.page = pagination.page // Ensure we sync pagination
+    // pagination state is reactive in composable, but we sync filters to it or vice-versa
+    // Actually useExpenses manages pagination state. We should update filters from pagination if triggered by page change.
+    // fetchExpenses takes filters.
+    
     fetchExpenses({
         page: pagination.page,
         limit: pagination.limit,
+        // category seems not used in new design for now, but keeping logic compatible
+        category: filters.category === 'ALL' ? undefined : (filters.category || undefined), 
         query: filters.query,
-        category: filters.category === 'ALL' ? undefined : (filters.category || undefined),
     })
 }
 
@@ -268,21 +291,22 @@ const onPageChange = (newPage: number) => {
 
 // Helpers
 const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value)
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(value)
 }
 
 const formatDate = (dateString: string) => {
     if (!dateString) return ''
-    return new Date(dateString).toLocaleDateString('en-US')
+    return new Date(dateString).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
 }
 
 const getCategoryColor = (category: string) => {
     switch (category.toLowerCase()) {
-        case 'food': return 'warning' // orange -> warning
-        case 'transport': return 'info' // blue -> info
-        case 'office': return 'secondary' // purple -> secondary (or plain color if supported) - Nuxt UI v3 theme colors are usually primary, secondary, success, info, warning, error, neutral
+        case 'food': return 'warning' 
+        case 'transport': return 'info' 
+        case 'office': return 'neutral' 
         case 'entertainment': return 'success'
-        case 'utilities': return 'info'
+        case 'utilities': return 'error'
+        case 'tools': return 'primary'
         default: return 'neutral'
     }
 }

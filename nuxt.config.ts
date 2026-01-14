@@ -4,6 +4,10 @@ export default defineNuxtConfig({
     compatibilityVersion: 4
   },
   modules: ['@nuxt/ui'],
+  colorMode: {
+    preference: 'light',
+    fallback: 'light'
+  },
   css: ['./app/assets/css/main.css'],
   runtimeConfig: {
     public: {

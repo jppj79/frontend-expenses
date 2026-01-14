@@ -112,6 +112,22 @@ export const useExpenses = () => {
         }
     }
 
+    const fetchCategoryStats = async () => {
+        try {
+            const data = await $fetch<any[]>('/expenses/stats/category', {
+                baseURL: config.public.apiBase
+            })
+            return data
+        } catch (error: any) {
+            toast.add({
+                title: 'Error fetching stats',
+                description: error.message,
+                color: 'error'
+            })
+            return []
+        }
+    }
+
     return {
         expenses,
         loading,
@@ -119,6 +135,7 @@ export const useExpenses = () => {
         fetchExpenses,
         createExpense,
         updateExpense,
-        deleteExpense
+        deleteExpense,
+        fetchCategoryStats
     }
 }
