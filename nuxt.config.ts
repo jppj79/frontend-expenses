@@ -15,6 +15,12 @@ export default defineNuxtConfig({
       apiBase: 'http://localhost:3000/api'
     }
   },
+  imports: {
+    dirs: [
+      'composables/**',
+      'utils/**'
+    ]
+  },
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
   devServer: {

@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { useExpenses } from '~/composables/useExpenses'
+import { useExpenses } from '~/composables/features/expenses/useExpenses'
 import * as echarts from 'echarts'
 // ECharts is client-only, usually safe in onMounted but with SPA mode even safer.
 

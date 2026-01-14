@@ -206,7 +206,9 @@
 <script setup lang="ts">
 import { z } from 'zod'
 import { useDebounceFn } from '@vueuse/core'
-import type { Expense } from '../types'
+import type { Expense } from '~/types'
+import { formatCurrency } from '~/utils/formatters/number'
+import { formatDate } from '~/utils/formatters/date'
 
 definePageMeta({
   ssr: false

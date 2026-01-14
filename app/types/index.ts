@@ -1,24 +1,9 @@
-export interface Expense {
-  id: number;
-  description: string;
-  amount: number;
-  date: string;
-  category: string;
-}
+// Re-export all model types
+export * from './models/expense'
 
-export interface PaginatedResult<T> {
-  data: T[];
-  meta: {
-    total: number;
-    page: number;
-    limit: number;
-    totalPages: number;
-  };
-}
+// Re-export shared types
+export * from './shared/pagination'
 
-export interface ExpenseFilters {
-  page: number;
-  limit: number;
-  category?: string;
-  query?: string;
-}
+// Legacy compatibility - keep old exports working
+export type { Expense, ExpenseInput, CategoryStat } from './models/expense'
+export type { PaginationMeta, PaginatedResponse, FilterParams } from './shared/pagination'

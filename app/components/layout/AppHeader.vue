@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useLayout } from '~/composables/useLayout'
+import { useLayout } from '~/composables/core/useLayout'
 
 const { toggleSidebar } = useLayout()
 </script>
