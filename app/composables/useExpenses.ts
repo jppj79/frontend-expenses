@@ -9,7 +9,7 @@ export const useExpenses = () => {
     const expenses = ref<Expense[]>([])
     const pagination = reactive({
         page: 1,
-        limit: 10,
+        limit: 5,
         total: 0,
         totalPages: 0
     })

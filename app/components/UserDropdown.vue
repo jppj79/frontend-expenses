@@ -18,8 +18,8 @@ const toggleDropdown = () => {
   <div class="relative" ref="dropdownRef">
     <!-- Trigger -->
     <div @click="toggleDropdown" class="flex items-center gap-2 cursor-pointer select-none">
-        <UAvatar src="https://avatars.githubusercontent.com/u/739984?v=4" alt="Marcus" size="sm" />
-        <span class="text-sm font-medium text-gray-700 dark:text-gray-200 hidden sm:block">Marcus</span>
+        <UAvatar src="https://avatars.githubusercontent.com/u/739984?v=4" alt="Juan Pablo" size="sm" />
+        <span class="text-sm font-medium text-gray-700 dark:text-gray-200 hidden sm:block">Juan Pablo</span>
         <UIcon 
             name="i-heroicons-chevron-down" 
             class="w-4 h-4 text-gray-400 transition-transform duration-200"

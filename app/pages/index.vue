@@ -82,7 +82,7 @@
 
            <!-- Category Column -->
           <template #category-cell="{ row }">
-            <UBadge :color="getCategoryColor(row.original.category)" variant="subtle" size="xs" :ui="{ rounded: 'rounded' }">
+            <UBadge :color="getCategoryColor(row.original.category)" variant="subtle" :ui="{ rounded: 'rounded' }">
               {{ row.original.category }}
             </UBadge>
           </template>
