@@ -15,6 +15,9 @@ A modern expense management application built with Nuxt 4, Vue 3, and Nuxt UI. T
 > - [ ] Input validation & sanitization
 > - [ ] Comprehensive error handling & monitoring
 > - [ ] Performance optimizations
+>   - Move metric calculations to database level (currently all records are fetched to frontend)
+>   - Implement server-side aggregations for dashboard KPIs
+>   - Add pagination and lazy loading
 > - [ ] Testing suite & CI/CD
 >
 ## ✨ Features
